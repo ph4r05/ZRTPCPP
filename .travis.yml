@@ -1,0 +1,46 @@
+# see http://about.travis-ci.org/docs/user/languages/cpp/ for more hints
+language: cpp
+
+# Use container based infrastructure for Travis
+sudo: false
+
+# Test against both compilers
+compiler:
+  - clang
+  - gcc
+
+# Coverity
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "Mkf+TVX7MALBirVDCwUY43MI+arY1YHFLRcV9ypKtyL1k/hlhGglcQVB9GldrCrXPBKhBd6V0jlWiCWNvbbLmciCuJ0kjI27fXgdohkqJJD0IKrbU/yVrt7enFN8JfZJLktoTtiDmWUOBJwoPYV0nLdARZhIe21y/HmJkB5Q6gPBrtKQck6kC2arxta2UKmcYVPO2PfbG1SROie44HCFRlnE1NtyDXEeEYK45Bkx4Rtco/h6Bhmj+SepLz24qn06uu21hClWUSB6K+XVzcEXBdilmYwFlEgxgj0KnTmoy0zC/XBMpYXfu/QPyeghmL5nBSyAQCWbyBMU03nMsiNqC9PsoUx+k6xLOdmQSNBLzpLzIcn6WisU9857skUd+AHCDeDiPPOewZ5J5jkJ271WHR6JDAsW7zGfiT5UWd/0p6EVUQ8JuVKNWuxvse3UFYlE+rP6a4eHRyvpOqRt0FFMJwbKbw2dnqoSfeTFUwk+DaKZkrgEWiPGxPFGikH4pkaT+upU/B3/DmYGpQmAqCANd+9k7B6jNmk9jwcSpkXiaw2fEwes1QDJyhIYhTBcef9OJlL+4ocUY97bV14FF7O77XA+rYmJXFTktsoKlLf+AmcNANJbjd6J/ponnmxvrQ6KqEbUpnJrMulfsu2+5dbYMe3UFiQwK7W2nFY49rb2NG0="
+
+# https://docs.travis-ci.com/user/migrating-from-legacy
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - boost-latest
+    - george-edison55-precise-backports
+    packages:
+    - build-essential
+    - autoconf
+    - cmake
+    - cmake-data
+  coverity_scan:
+      project:
+        name: "ph4r05/ZRTPCPP"
+        description: "ZRTP build submitted by Travis CI"
+      notification_email: ph4r05@gmail.com
+      build_command_prepend: cmake -DCORE_LIB=true .
+      build_command:   make
+      branch_pattern: coverity_scan
+
+before_install:
+  - echo $LANG
+  - echo $LC_ALL
+
+script:
+  - ls -las
+  - bash build.sh
